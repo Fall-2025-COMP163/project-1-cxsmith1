@@ -1,71 +1,37 @@
 """
 COMP 163 - Project 1: Character Creator & Saving/Loading
-Name: [Your Name Here]
-Date: [Date]
+Name: [Caleb Smith]
+Date: [10/27/25]
 
 AI Usage: [Document any AI assistance used]
-Example: AI helped with file I/O error handling logic in save_character function
 """
 
 def create_character(name, character_class):
-    stats = {
-        "name": name,
-        "level": 1,
-        "strength": 1,
-        "magic": 1,
-        "health": 50,
-        "gold": 0
-    } #Dictionary storing base values for character pre creation
-
-    if character_class == 1:
-        stats["strength"] += 7
-        stats["health"] += 50
-        stats["gold"] += 15
-        stats["class"] = "Warrior" #Our first class is the warrior archetype
-
-    elif character_class == 2:
-        stats["magic"] += 7
-        stats["health"] += 20
-        stats["gold"] += 30
-        stats["class"] = "Mage" #Second is mage
-
-    elif character_class == 3:
-        stats["strength"] += 3
-        stats["health"] += 30
-        stats["gold"] += 25
-        stats["class"] = "Rogue" #Third is rogue
-
-    elif character_class == 4:
-        stats["magic"] += 4
-        stats["health"] += 40
-        stats["gold"] += 20
-        stats["class"] = "Cleric" #Fourth is cleric
-
-    return stats
 
 
-# giving our character a name
-name = input("Enter your character's name: ")
+    if character_class == "Warrior":
+        strength = 10 + (level * 3)
+        magic = 2 + (level * 1)
+        health = 100 + (level * 10)
+    elif character_class == "Mage":
+        strength = 3 + (level * 1)
+        magic = 12 + (level * 4)
+        health = 80 + (level * 6)
+    elif character_class == "Rogue":
+        strength = 6 + (level * 2)
+        magic = 6 + (level * 2)
+        health = 70 + (level * 5)
+    elif character_class == "Cleric":
+        strength = 5 + (level * 2)
+        magic = 10 + (level * 3)
+        health = 90 + (level * 8)
 
-# keep asking until user picks 1–4
-while True:
-        character_class = int(input("\nChoose your class:\n1. Warrior\n2. Mage\n3. Rogue\n4. Cleric\nSelection: "))
-        if character_class in [1, 2, 3, 4]:
-            break
-        else:
-            print("Invalid choice. Please enter 1, 2, 3, or 4.")
+    # send back all three numbers
+    return (strength, magic, health)
 
 
-player = create_character(name, character_class)
 
-# AI USED FOR DISPLAY SUMMARY SETUP/LOOK
-print("\n=== CHARACTER CREATED ===")
-for key, value in player.items():
-    print(f"{key.capitalize()}: {value}")
 
-s = ''
-spacer = f'{s:=>15}'
-print(spacer) #Our spacer in between sections of the game, which in this case is the  = symbol
     """
     Creates a new character dictionary with calculated stats
     Returns: dictionary with keys: name, class, level, strength, magic, health, gold
@@ -76,9 +42,32 @@ print(spacer) #Our spacer in between sections of the game, which in this case is
     """
     # TODO: Implement this function
     # Remember to use calculate_stats() function for stat calculation
-    pass
+    
 
 def calculate_stats(character_class, level):
+    strength, magic, health = calculate_stats(character_class, 1)
+
+    # give each class a little bit of different gold
+    if character_class == "Warrior":
+        gold = 15
+    elif character_class == "Mage":
+        gold = 30
+    elif character_class == "Rogue":
+        gold = 25
+    elif character_class == "Cleric":
+        gold = 20
+
+    character = {
+        "name": name,
+        "class": character_class,
+        "level": 1,
+        "strength": strength,
+        "magic": magic,
+        "health": health,
+        "gold": gold
+    }
+    return character
+
     """
     Calculates base stats based on class and level
     Returns: tuple of (strength, magic, health)
@@ -91,9 +80,21 @@ def calculate_stats(character_class, level):
     """
     # TODO: Implement this function
     # Return a tuple: (strength, magic, health)
-    pass
+    
 
 def save_character(character, filename):
+    try:
+        with open(filename, "w") as f:
+            f.write(f"Character Name: {character['name']}\n")
+            f.write(f"Class: {character['class']}\n")
+            f.write(f"Level: {character['level']}\n")
+            f.write(f"Strength: {character['strength']}\n")
+            f.write(f"Magic: {character['magic']}\n")
+            f.write(f"Health: {character['health']}\n")
+            f.write(f"Gold: {character['gold']}\n")
+        return True
+    except:
+        return False
     """
     Saves character to text file in specific format
     Returns: True if successful, False if error occurred
@@ -109,9 +110,28 @@ def save_character(character, filename):
     """
     # TODO: Implement this function
     # Remember to handle file errors gracefully
-    pass
+    
 
 def load_character(filename):
+     try:
+        with open(filename, "r") as f:
+            lines = f.readlines()
+
+        character = {}
+        for line in lines:
+            line = line.strip()
+            if ": " in line:
+                key, value = line.split(": ", 1)
+                key = key.lower().replace("character name", "name")
+
+                # convert numbers to integers if possible
+                if value.isdigit():
+                    value = int(value)
+
+                character[key] = value
+
+        return character
+    
     """
     Loads character from text file
     Returns: character dictionary if successful, None if file not found
@@ -121,6 +141,9 @@ def load_character(filename):
     pass
 
 def display_character(character):
+     print("\n=== CHARACTER SHEET ===")
+    for key, value in character.items():
+        print(f"{key.capitalize()}: {value}")
     """
     Prints formatted character sheet
     Returns: None (prints to console)
@@ -139,6 +162,11 @@ def display_character(character):
     pass
 
 def level_up(character):
+    character["level"] += 1
+    strength, magic, health = calculate_stats(character["class"], character["level"])
+    character["strength"] = strength
+    character["magic"] = magic
+    character["health"] = health
     """
     Increases character level and recalculates stats
     Modifies the character dictionary directly
@@ -146,12 +174,50 @@ def level_up(character):
     """
     # TODO: Implement this function
     # Remember to recalculate stats for the new level
-    pass
+    
 
 # Main program area (optional - for testing your functions)
 if __name__ == "__main__":
     print("=== CHARACTER CREATOR ===")
-    print("Test your functions here!")
+     name = input("Enter your character's name: ")
+
+    # show menu and make sure input is valid
+    while True:
+        choice = input(
+            "\nChoose your class:\n1. Warrior\n2. Mage\n3. Rogue\n4. Cleric\nSelection: "
+        )
+
+        if choice == "1":
+            character_class = "Warrior"
+        elif choice == "2":
+            character_class = "Mage"
+        elif choice == "3":
+            character_class = "Rogue"
+        elif choice == "4":
+            character_class = "Cleric"
+        else:
+            print("Invalid choice. Please enter 1, 2, 3, or 4.")
+            continue
+        break
+
+    # create and show the character
+    player = create_character(name, character_class)
+    display_character(player)
+
+    # save to file
+    save_character(player, "my_character.txt")
+    print("\nCharacter saved to my_character.txt!")
+
+    # load and show it again
+    loaded = load_character("my_character.txt")
+    if loaded:
+        print("\nLoaded character:")
+        display_character(loaded)
+
+        print("\nLeveling up...")
+        level_up(loaded)
+        display_character(loaded)
+
     
     # Example usage:
     # char = create_character("TestHero", "Warrior")
