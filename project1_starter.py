@@ -3,7 +3,7 @@ COMP 163 - Project 1: Character Creator & Saving/Loading
 Name: [Caleb Smith]
 Date: [10/27/25]
 
-AI Usage: [Document any AI assistance used]
+AI Usage: A whole lot, often my code would be very very close to what was needed for the test cases, but it wasn't properly formatted, or would be out of order. 
 """
 
 def create_character(name, character_class):
@@ -143,7 +143,7 @@ def load_character(filename):
 def display_character(character):
      print("\n=== CHARACTER SHEET ===")
     for key, value in character.items():
-        print(f"{key.capitalize()}: {value}")
+        print(f"{key.capitalize()}: {value}") #capitalizes the first part of each line in our character sheet
     """
     Prints formatted character sheet
     Returns: None (prints to console)
@@ -179,7 +179,7 @@ def level_up(character):
 # Main program area (optional - for testing your functions)
 if __name__ == "__main__":
     print("=== CHARACTER CREATOR ===")
-     name = input("Enter your character's name: ")
+     name = input("Enter your characters' name: ")
 
     # show menu and make sure input is valid
     while True:
@@ -219,8 +219,3 @@ if __name__ == "__main__":
         display_character(loaded)
 
     
-    # Example usage:
-    # char = create_character("TestHero", "Warrior")
-    # display_character(char)
-    # save_character(char, "my_character.txt")
-    # loaded = load_character("my_character.txt")
