@@ -8,6 +8,64 @@ Example: AI helped with file I/O error handling logic in save_character function
 """
 
 def create_character(name, character_class):
+    stats = {
+        "name": name,
+        "level": 1,
+        "strength": 1,
+        "magic": 1,
+        "health": 50,
+        "gold": 0
+    } #Dictionary storing base values for character pre creation
+
+    if character_class == 1:
+        stats["strength"] += 7
+        stats["health"] += 50
+        stats["gold"] += 15
+        stats["class"] = "Warrior" #Our first class is the warrior archetype
+
+    elif character_class == 2:
+        stats["magic"] += 7
+        stats["health"] += 20
+        stats["gold"] += 30
+        stats["class"] = "Mage" #Second is mage
+
+    elif character_class == 3:
+        stats["strength"] += 3
+        stats["health"] += 30
+        stats["gold"] += 25
+        stats["class"] = "Rogue" #Third is rogue
+
+    elif character_class == 4:
+        stats["magic"] += 4
+        stats["health"] += 40
+        stats["gold"] += 20
+        stats["class"] = "Cleric" #Fourth is cleric
+
+    return stats
+
+
+# giving our character a name
+name = input("Enter your character's name: ")
+
+# keep asking until user picks 1–4
+while True:
+        character_class = int(input("\nChoose your class:\n1. Warrior\n2. Mage\n3. Rogue\n4. Cleric\nSelection: "))
+        if character_class in [1, 2, 3, 4]:
+            break
+        else:
+            print("Invalid choice. Please enter 1, 2, 3, or 4.")
+
+
+player = create_character(name, character_class)
+
+# AI USED FOR DISPLAY SUMMARY SETUP/LOOK
+print("\n=== CHARACTER CREATED ===")
+for key, value in player.items():
+    print(f"{key.capitalize()}: {value}")
+
+s = ''
+spacer = f'{s:=>15}'
+print(spacer) #Our spacer in between sections of the game, which in this case is the  = symbol
     """
     Creates a new character dictionary with calculated stats
     Returns: dictionary with keys: name, class, level, strength, magic, health, gold
